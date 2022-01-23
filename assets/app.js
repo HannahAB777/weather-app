@@ -10,33 +10,26 @@ const searchHistoryContainer = document.getElementById("search-history");
 const currentdate = document.getElementById("current-date");
 const todaysDate = moment().format("dddd D/MM");
 
-currentdate.textContent= todaysDate;
+currentdate.textContent = todaysDate;
 
 button.addEventListener("click", function (event) {
   event.preventDefault();
   const placeInput = document.getElementById("search");
-  const place = placeInput.value;
+  let place = placeInput.value;
 
-  if(place != ""){
+  if (place != "") {
 
     localStorage.setItem("city", place);
-    
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.city[i];
-    const cityLi = document.createElement("li");
-    searchHistoryContainer.appendChild(cityLi);
-    cityLi.textContent= localStorage.getItem("city");
+
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.city[i];
+      const cityLi = document.createElement("li");
+      searchHistoryContainer.appendChild(cityLi);
+      cityLi.textContent = localStorage.getItem("city");
     }
-    }
-    
-
-
-
-
-
-
-
-
+    NewForecast();
+  }
+  function NewForecast(){
   const weatherUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + place + '&appid=8036ed1d4d3026cb916b26417cd7e2c8';
 
   fetch(weatherUrl)
@@ -59,72 +52,82 @@ button.addEventListener("click", function (event) {
     }).then(function (oneCallData) {
       UV.textContent = "UV-Index: " + Math.floor(oneCallData.current.uvi);
       const UVdata = Math.floor(oneCallData.current.uvi);
-      if (UVdata < 3){
+      if (UVdata < 3) {
         UV.classList.add("favourable");
       }
-      if (UVdata >= 3 && UVdata <= 5){
+      if (UVdata >= 3 && UVdata <= 5) {
         UV.classList.add("moderate");
       }
-      if(UVdata >5 && UVdata <= 8){
+      if (UVdata > 5 && UVdata <= 8) {
         UV.classList.add("high");
       }
-      if(UVdata >= 9){
+      if (UVdata >= 9) {
         UV.classList.add("severe");
       }
-      dayContainer.textContent= "";
-      const forecast = oneCallData.daily.slice(1,6);
-      
-          for (let i = 0; i < forecast.length; i++) {
-            const weather = forecast[i];
-            
-            const card = createCards(weather.dt, weather.weather[0].icon, weather.temp.day, weather.humidity, weather.wind_speed);
-      
-            dayContainer.appendChild(card);
-          }
+      dayContainer.textContent = "";
+      const forecast = oneCallData.daily.slice(1, 6);
+
+      for (let i = 0; i < forecast.length; i++) {
+        const weather = forecast[i];
+
+        const card = createCards(weather.dt, weather.weather[0].icon, weather.temp.day, weather.humidity, weather.wind_speed);
+
+        dayContainer.appendChild(card);
+      }
     });
 
-});
+  }
 function createCards(date, icon, temp, humidity, wind) {
-  
-  
-      const card = document.createElement('div');
-      card.setAttribute('class', 'card');
-      card.setAttribute('class', 'col');
-  
-      const iconEl = document.createElement("img");
-      iconEl.setAttribute("src", "https://openweathermap.org/img/w/"+ icon + ".png");
-      card.appendChild(iconEl);
-  
-      const weathercontainer = document.createElement('div');
-      weathercontainer.setAttribute("class", "card-body");
-      card.appendChild(weathercontainer);
-  
-      const dateheader = document.createElement("h4");
-      dateheader.setAttribute("class", "card-title");
-      weathercontainer.appendChild(dateheader);
-      dateheader.textContent = moment.unix(date).format("dddd D/MM");
-  
-      const p = document.createElement('p');
-      weathercontainer.appendChild(p);
-  
-      const ul = document.createElement('ul');
-      p.appendChild(ul);
-  
-      const tempLi = document.createElement('li');
-      ul.appendChild(tempLi);
-      tempLi.textContent = "Temperature: " + (Math.floor(temp - 273.15)) + "°C";
-  
-      const humidityEl = document.createElement('li');
-      ul.appendChild(humidityEl);
-      humidityEl.textContent = "Humidity: " + humidity;
-  
-      const windEl = document.createElement('li');
-      ul.appendChild(windEl);
-      windEl.textContent = "Wind: " + wind + "km/h";
-      
-      return card;
-    }
 
 
-  
-  
+  const card = document.createElement('div');
+  card.setAttribute('class', 'card');
+  card.setAttribute('class', 'col');
+
+  const iconEl = document.createElement("img");
+  iconEl.setAttribute("src", "https://openweathermap.org/img/w/" + icon + ".png");
+  card.appendChild(iconEl);
+
+  const weathercontainer = document.createElement('div');
+  weathercontainer.setAttribute("class", "card-body");
+  card.appendChild(weathercontainer);
+
+  const dateheader = document.createElement("h4");
+  dateheader.setAttribute("class", "card-title");
+  weathercontainer.appendChild(dateheader);
+  dateheader.textContent = moment.unix(date).format("dddd D/MM");
+
+  const p = document.createElement('p');
+  weathercontainer.appendChild(p);
+
+  const ul = document.createElement('ul');
+  p.appendChild(ul);
+
+  const tempLi = document.createElement('li');
+  ul.appendChild(tempLi);
+  tempLi.textContent = "Temperature: " + (Math.floor(temp - 273.15)) + "°C";
+
+  const humidityEl = document.createElement('li');
+  ul.appendChild(humidityEl);
+  humidityEl.textContent = "Humidity: " + humidity;
+
+  const windEl = document.createElement('li');
+  ul.appendChild(windEl);
+  windEl.textContent = "Wind: " + wind + "km/h";
+
+  return card;
+}
+
+});
+
+
+searchHistoryContainer.addEventListener("click", function(event){
+  const listItem = event.target;
+
+  const newSearch = listItem.textContent;
+  place = newSearch;
+  NewForecast();
+
+});
+
+
