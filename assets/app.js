@@ -9,6 +9,7 @@ const dayContainer = document.getElementById("five-day-forecast");
 const searchHistoryContainer = document.getElementById("search-history");
 const currentdate = document.getElementById("current-date");
 const todaysDate = moment().format("dddd D/MM");
+const placeInput = document.getElementById("search");
 
 currentdate.textContent = todaysDate;
 
@@ -28,6 +29,7 @@ button.addEventListener("click", function (event) {
       cityLi.textContent = localStorage.getItem("city");
     }
     NewForecast();
+    placeInput.value = "";
   }
   
 });
@@ -73,6 +75,7 @@ function createCards(date, icon, temp, humidity, wind) {
   return card;
 }
 function NewForecast(){
+  let place = placeInput.value;
   const weatherUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + place + '&appid=8036ed1d4d3026cb916b26417cd7e2c8';
 
   fetch(weatherUrl)
@@ -124,11 +127,11 @@ function NewForecast(){
 
 searchHistoryContainer.addEventListener("click", function(event){
   const listItem = event.target;
-
+  console.log(event.target);
   const newSearch = listItem.textContent;
-  place = newSearch;
+  placeInput.value = newSearch;
   NewForecast();
-
+  placeInput.value = "";
 });
 
 
