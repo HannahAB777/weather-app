@@ -1,26 +1,38 @@
 *{
-    border: 1px solid palevioletred;
+    box-sizing: border-box;
+    border-radius: 5px;
 }
 
 body{
-    box-sizing: border-box;
     height: 100vh;
     width: 100vw;
 }
 
 .container{
     height: fit-content;
+    display: flex;
+}
+
+.UVI-index{
+    flex-grow: 1;
 }
 
 .five-day-forecast{
     display: flex;
 }
 
-.days{
-    flex-grow: 1;
-    height:fit-content;
+.favourable{
+    background-color: greenyellow;
 }
 
-.col-12{
-    height: 50px;
+.moderate{
+    background-color: gold;
+}
+
+.high{
+    background-color: orange;
+}
+
+.severe{
+    background-color: red;
 }
