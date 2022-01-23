@@ -6,12 +6,35 @@ const wind = document.getElementById("wind");
 const UV = document.getElementById("UV");
 const todayIcon = document.getElementById("icon");
 const dayContainer = document.getElementById("five-day-forecast");
-
+const searchHistoryContainer = document.getElementById("search-history");
 
 button.addEventListener("click", function (event) {
   event.preventDefault();
   const placeInput = document.getElementById("search");
   const place = placeInput.value;
+
+  if(place != ""){
+
+    localStorage.setItem("city", place);
+    
+    for (let i = 0; i < localStorage.length; i++) {
+      const value= localStorage.city[i];
+      ;
+      const cityLi = document.createElement("li");
+      searchHistoryContainer.appendChild(cityLi);
+      cityLi.textContent= value;
+      console.log(localStorage);
+    }
+    
+  }
+
+
+
+
+
+
+
+
   const weatherUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + place + '&appid=8036ed1d4d3026cb916b26417cd7e2c8';
 
   fetch(weatherUrl)
@@ -46,7 +69,6 @@ button.addEventListener("click", function (event) {
       if(UVdata >= 9){
         UV.classList.add("severe");
       }
-      console.log(oneCallData);
       dayContainer.textContent= "";
       const forecast = oneCallData.daily.slice(1,6);
       
@@ -101,18 +123,6 @@ function createCards(date, icon, temp, humidity, wind) {
       return card;
     }
 
-  
-  //time input
-  
-  
-  
-  
-  
-  
-  
-  //a colour loop for the uv
-  
-  
-  //local storage create a looped list for searched items
+
   
   
