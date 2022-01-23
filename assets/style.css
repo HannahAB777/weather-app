@@ -1,0 +1,26 @@
+*{
+    border: 1px solid palevioletred;
+}
+
+body{
+    box-sizing: border-box;
+    height: 100vh;
+    width: 100vw;
+}
+
+.container{
+    height: fit-content;
+}
+
+.five-day-forecast{
+    display: flex;
+}
+
+.days{
+    flex-grow: 1;
+    height:fit-content;
+}
+
+.col-12{
+    height: 50px;
+}
