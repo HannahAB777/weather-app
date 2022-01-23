@@ -7,6 +7,10 @@ const UV = document.getElementById("UV");
 const todayIcon = document.getElementById("icon");
 const dayContainer = document.getElementById("five-day-forecast");
 const searchHistoryContainer = document.getElementById("search-history");
+const currentdate = document.getElementById("current-date");
+const todaysDate = moment().format("dddd D/MM");
+
+currentdate.textContent= todaysDate;
 
 button.addEventListener("click", function (event) {
   event.preventDefault();
@@ -16,17 +20,19 @@ button.addEventListener("click", function (event) {
   if(place != ""){
 
     localStorage.setItem("city", place);
+
+    const cityIndex = localStorage.city;
     
-    for (let i = 0; i < localStorage.length; i++) {
-      const value= localStorage.city[i];
-      ;
-      const cityLi = document.createElement("li");
-      searchHistoryContainer.appendChild(cityLi);
-      cityLi.textContent= value;
-      console.log(localStorage);
-    }
+  for (let index = 0; index < localStorage.length; index++) {
+    const cityText = cityIndex[index];
+    const cityLi = document.createElement("li");
+    searchHistoryContainer.appendChild(cityLi);
+    cityLi.textContent= cityText;
+    console.log(cityText);
     
   }
+    }
+    
 
 
 
@@ -100,7 +106,7 @@ function createCards(date, icon, temp, humidity, wind) {
       const dateheader = document.createElement("h4");
       dateheader.setAttribute("class", "card-title");
       weathercontainer.appendChild(dateheader);
-      dateheader.textContent = moment.unix(date).format("dddd");
+      dateheader.textContent = moment.unix(date).format("dddd D/MM");
   
       const p = document.createElement('p');
       weathercontainer.appendChild(p);
