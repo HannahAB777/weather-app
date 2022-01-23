@@ -20,17 +20,13 @@ button.addEventListener("click", function (event) {
   if(place != ""){
 
     localStorage.setItem("city", place);
-
-    const cityIndex = localStorage.city;
     
-  for (let index = 0; index < localStorage.length; index++) {
-    const cityText = cityIndex[index];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.city[i];
     const cityLi = document.createElement("li");
     searchHistoryContainer.appendChild(cityLi);
-    cityLi.textContent= cityText;
-    console.log(cityText);
-    
-  }
+    cityLi.textContent= localStorage.getItem("city");
+    }
     }
     
 
