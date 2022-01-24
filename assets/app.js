@@ -20,13 +20,19 @@ function init() {
   const cityarraystring = localStorage.getItem("citys"); // localStorage returns strings
   cityarray = JSON.parse(cityarraystring);
 //checking for previous search data and turning into a list
-    for (let i = 0; i < cityarray[i]; i++) {
+
+if(cityarray == null){
+  cityarray = [];
+}
+else{
+for (let i = 0; i < cityarray[i]; i++) {
       const cityvalue = cityarray[i];
       const cityLi = document.createElement("li");
       cityLi.classList.add("search");
       searchHistoryContainer.appendChild(cityLi);
       cityLi.textContent = cityvalue;
     }
+  }
 
 }
 
