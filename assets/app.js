@@ -10,9 +10,11 @@ const searchHistoryContainer = document.getElementById("search-history");
 const currentdate = document.getElementById("current-date");
 const todaysDate = moment().format("dddd D/MM");
 const placeInput = document.getElementById("search");
+const currentForecast = document.getElementById("current-forecast");
 
+//current date show at the top of the page
 currentdate.textContent = todaysDate;
-
+//click event to retrieve the search input for API retrieval and to store in local storage
 button.addEventListener("click", function (event) {
   event.preventDefault();
   const placeInput = document.getElementById("search");
@@ -23,8 +25,9 @@ button.addEventListener("click", function (event) {
     localStorage.setItem("city", place);
     
     for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.city[i];
+      const key = localStorage[i];
       const cityLi = document.createElement("li");
+      cityLi.classList.add("search");
       searchHistoryContainer.appendChild(cityLi);
       cityLi.textContent = localStorage.getItem("city");
     }
@@ -33,7 +36,7 @@ button.addEventListener("click", function (event) {
   }
   
 });
-
+//creating a function for a card for future forecast to be displayed
 function createCards(date, icon, temp, humidity, wind) {
 
 
@@ -75,14 +78,17 @@ function createCards(date, icon, temp, humidity, wind) {
   return card;
 }
 function NewForecast(){
+  //taking the input and searching for weather data
   let place = placeInput.value;
   const weatherUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + place + '&appid=8036ed1d4d3026cb916b26417cd7e2c8';
 
   fetch(weatherUrl)
     .then(function (response) {
+      if (response.ok)
       return response.json();
     })
     .then(function (data) {
+      //entering the data into the container for todays forecast
       city.textContent = "City: " + data.name;
       temp.textContent = "Temperature: " + (Math.floor(data.main.temp - 273.15)) + "°C";
       humidity.textContent = "Humidity: " + data.main.humidity;
@@ -90,6 +96,7 @@ function NewForecast(){
       todayIcon.src = "https://openweathermap.org/img/w/" + data.weather[0].icon + ".png";
       const todayLat = data.coord.lat;
       const todayLon = data.coord.lon;
+      //retrieving the icon
       const UVToday = "https://api.openweathermap.org/data/2.5/onecall?lat=" + todayLat + "&lon=" + todayLon + "&appid=8036ed1d4d3026cb916b26417cd7e2c8";
       return fetch(UVToday)
         .then(function (response) {
@@ -98,6 +105,11 @@ function NewForecast(){
     }).then(function (oneCallData) {
       UV.textContent = "UV-Index: " + Math.floor(oneCallData.current.uvi);
       const UVdata = Math.floor(oneCallData.current.uvi);
+      //if statments to change the colour of the UV element in correlation with UV intensity
+      UV.classList.remove("favourable");
+      UV.classList.remove("moderate");
+      UV.classList.remove("high");
+      UV.classList.remove("severe");
       if (UVdata < 3) {
         UV.classList.add("favourable");
       }
@@ -112,7 +124,7 @@ function NewForecast(){
       }
       dayContainer.textContent = "";
       const forecast = oneCallData.daily.slice(1, 6);
-
+      //looping through the data and creating cards and filling them with the data shown below
       for (let i = 0; i < forecast.length; i++) {
         const weather = forecast[i];
 
@@ -124,7 +136,7 @@ function NewForecast(){
 
   }
 
-
+//when a list item is clicked the forecast is then shown for the place that its textcontent refers to
 searchHistoryContainer.addEventListener("click", function(event){
   const listItem = event.target;
   console.log(event.target);
