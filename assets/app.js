@@ -11,30 +11,54 @@ const currentdate = document.getElementById("current-date");
 const todaysDate = moment().format("dddd D/MM");
 const placeInput = document.getElementById("search");
 const currentForecast = document.getElementById("current-forecast");
+const errorEl = document.getElementById("error");
+
+let cityarray = [];
+
+function init() {
+  // if array loop through it and append lis
+  const cityarraystring = localStorage.getItem("citys"); // localStorage returns strings
+  cityarray = JSON.parse(cityarraystring);
+
+    for (let i = 0; i < cityarray[i]; i++) {
+      const cityvalue = cityarray[i];
+      const cityLi = document.createElement("li");
+      cityLi.classList.add("search");
+      searchHistoryContainer.appendChild(cityLi);
+      cityLi.textContent = cityvalue;
+    }
+
+}
+
+init();
 
 //current date show at the top of the page
 currentdate.textContent = todaysDate;
 //click event to retrieve the search input for API retrieval and to store in local storage
 button.addEventListener("click", function (event) {
   event.preventDefault();
+  errorEl.textContent = "";
   const placeInput = document.getElementById("search");
   let place = placeInput.value;
-  
+
   if (place != "") {
-    
-    localStorage.setItem("city", place);
-    
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage[i];
-      const cityLi = document.createElement("li");
-      cityLi.classList.add("search");
-      searchHistoryContainer.appendChild(cityLi);
-      cityLi.textContent = localStorage.getItem("city");
-    }
+
+    cityarray.push(place);
+
+
+    const cityarraystring = JSON.stringify(cityarray);
+    localStorage.setItem("citys", cityarraystring);
+
+    const cityLi = document.createElement("li");
+    cityLi.classList.add("search");
+    searchHistoryContainer.appendChild(cityLi);
+    cityLi.textContent = place;
+
+  
     NewForecast();
     placeInput.value = "";
   }
-  
+
 });
 //creating a function for a card for future forecast to be displayed
 function createCards(date, icon, temp, humidity, wind) {
@@ -56,28 +80,28 @@ function createCards(date, icon, temp, humidity, wind) {
   dateheader.setAttribute("class", "card-title");
   weathercontainer.appendChild(dateheader);
   dateheader.textContent = moment.unix(date).format("dddd D/MM");
-
+  
   const p = document.createElement('p');
   weathercontainer.appendChild(p);
-
+  
   const ul = document.createElement('ul');
   p.appendChild(ul);
-
+  
   const tempLi = document.createElement('li');
   ul.appendChild(tempLi);
   tempLi.textContent = "Temperature: " + (Math.floor(temp - 273.15)) + "°C";
-
+  
   const humidityEl = document.createElement('li');
   ul.appendChild(humidityEl);
   humidityEl.textContent = "Humidity: " + humidity;
-
+  
   const windEl = document.createElement('li');
   ul.appendChild(windEl);
   windEl.textContent = "Wind: " + wind + "km/h";
-
+  
   return card;
 }
-function NewForecast(){
+function NewForecast() {
   //taking the input and searching for weather data
   let place = placeInput.value;
   const weatherUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + place + '&appid=8036ed1d4d3026cb916b26417cd7e2c8';
@@ -85,7 +109,9 @@ function NewForecast(){
   fetch(weatherUrl)
     .then(function (response) {
       if (response.ok)
-      return response.json();
+        return response.json();
+      if (!response.ok)
+        errorEl.textContent = "City not found";
     })
     .then(function (data) {
       //entering the data into the container for todays forecast
@@ -134,10 +160,10 @@ function NewForecast(){
       }
     });
 
-  }
+}
 
 //when a list item is clicked the forecast is then shown for the place that its textcontent refers to
-searchHistoryContainer.addEventListener("click", function(event){
+searchHistoryContainer.addEventListener("click", function (event) {
   const listItem = event.target;
   console.log(event.target);
   const newSearch = listItem.textContent;
@@ -145,5 +171,3 @@ searchHistoryContainer.addEventListener("click", function(event){
   NewForecast();
   placeInput.value = "";
 });
-
-
