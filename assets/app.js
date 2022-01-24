@@ -164,6 +164,7 @@ function NewForecast() {
 
 //when a list item is clicked the forecast is then shown for the place that its textcontent refers to
 searchHistoryContainer.addEventListener("click", function (event) {
+  event.preventDefault();
   const listItem = event.target;
   console.log(event.target);
   const newSearch = listItem.textContent;
