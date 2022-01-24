@@ -12,5 +12,5 @@ the ap is made with the use of HTML, CSS, JAVASCRIPT, MONOMENT.JS and BOOTSTRAP.
 the page while in use will resemble the screenshot bellow:
 ![image](https://user-images.githubusercontent.com/93077324/150799280-5e623376-8040-4c94-aa5a-9a6fae688d36.png)
 
-link to site:
+link to site: https://hannahab777.github.io/weather-app/
 
