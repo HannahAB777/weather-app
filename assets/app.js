@@ -19,7 +19,7 @@ function init() {
   // if array loop through it and append lis
   const cityarraystring = localStorage.getItem("citys"); // localStorage returns strings
   cityarray = JSON.parse(cityarraystring);
-
+//checking for previous search data and turning into a list
     for (let i = 0; i < cityarray[i]; i++) {
       const cityvalue = cityarray[i];
       const cityLi = document.createElement("li");
@@ -45,7 +45,7 @@ button.addEventListener("click", function (event) {
 
     cityarray.push(place);
 
-
+    //storing the search data in localstorage
     const cityarraystring = JSON.stringify(cityarray);
     localStorage.setItem("citys", cityarraystring);
 
